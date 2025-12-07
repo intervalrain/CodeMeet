@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1CF62ED2-E970-453F-8789-9AC40F606CA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMeet.Api", "src\CodeMeet.Api\CodeMeet.Api.csproj", "{660CD62F-1E6B-4864-98FE-30FEF01D68FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMeet.Application", "src\CodeMeet.Application\CodeMeet.Application.csproj", "{128D9AFF-FF06-408F-804E-CF9FD119745B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMeet.Domain", "src\CodeMeet.Domain\CodeMeet.Domain.csproj", "{28785042-7E7A-4114-AC98-6BA781AA1462}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMeet.Infrastructure", "src\CodeMeet.Infrastructure\CodeMeet.Infrastructure.csproj", "{BB722FFF-BD44-44F4-9C77-993D34D3BE79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7B3EE324-D688-40B2-8A6C-9D1E8A5AB1C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMeet.Application.Tests", "tests\CodeMeet.Application.Tests\CodeMeet.Application.Tests.csproj", "{9C0C038D-DF7E-478C-A8BE-9EADE09319B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeMeet.Domain.Tests", "tests\CodeMeet.Domain.Tests\CodeMeet.Domain.Tests.csproj", "{F490EE09-2212-4F84-97B9-0C2EF2BC9EAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{660CD62F-1E6B-4864-98FE-30FEF01D68FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{660CD62F-1E6B-4864-98FE-30FEF01D68FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{660CD62F-1E6B-4864-98FE-30FEF01D68FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{660CD62F-1E6B-4864-98FE-30FEF01D68FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{128D9AFF-FF06-408F-804E-CF9FD119745B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128D9AFF-FF06-408F-804E-CF9FD119745B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128D9AFF-FF06-408F-804E-CF9FD119745B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128D9AFF-FF06-408F-804E-CF9FD119745B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28785042-7E7A-4114-AC98-6BA781AA1462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28785042-7E7A-4114-AC98-6BA781AA1462}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28785042-7E7A-4114-AC98-6BA781AA1462}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28785042-7E7A-4114-AC98-6BA781AA1462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB722FFF-BD44-44F4-9C77-993D34D3BE79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB722FFF-BD44-44F4-9C77-993D34D3BE79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB722FFF-BD44-44F4-9C77-993D34D3BE79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB722FFF-BD44-44F4-9C77-993D34D3BE79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C0C038D-DF7E-478C-A8BE-9EADE09319B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C0C038D-DF7E-478C-A8BE-9EADE09319B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C0C038D-DF7E-478C-A8BE-9EADE09319B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C0C038D-DF7E-478C-A8BE-9EADE09319B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F490EE09-2212-4F84-97B9-0C2EF2BC9EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F490EE09-2212-4F84-97B9-0C2EF2BC9EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F490EE09-2212-4F84-97B9-0C2EF2BC9EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F490EE09-2212-4F84-97B9-0C2EF2BC9EAB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{660CD62F-1E6B-4864-98FE-30FEF01D68FE} = {1CF62ED2-E970-453F-8789-9AC40F606CA7}
+		{128D9AFF-FF06-408F-804E-CF9FD119745B} = {1CF62ED2-E970-453F-8789-9AC40F606CA7}
+		{28785042-7E7A-4114-AC98-6BA781AA1462} = {1CF62ED2-E970-453F-8789-9AC40F606CA7}
+		{BB722FFF-BD44-44F4-9C77-993D34D3BE79} = {1CF62ED2-E970-453F-8789-9AC40F606CA7}
+		{9C0C038D-DF7E-478C-A8BE-9EADE09319B1} = {7B3EE324-D688-40B2-8A6C-9D1E8A5AB1C7}
+		{F490EE09-2212-4F84-97B9-0C2EF2BC9EAB} = {7B3EE324-D688-40B2-8A6C-9D1E8A5AB1C7}
+	EndGlobalSection
+EndGlobal
