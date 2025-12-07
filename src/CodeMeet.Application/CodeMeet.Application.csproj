@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodeMeet.Domain\CodeMeet.Domain.csproj" />
+    <ProjectReference Include="..\CodeMeet.Ddd\CodeMeet.Ddd.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

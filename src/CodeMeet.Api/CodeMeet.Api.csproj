@@ -8,11 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CodeMeet.Infrastructure\CodeMeet.Infrastructure.csproj" />
     <ProjectReference Include="..\CodeMeet.Application\CodeMeet.Application.csproj" />
+    <ProjectReference Include="..\CodeMeet.Ddd\CodeMeet.Ddd.csproj" />
   </ItemGroup>
 
 </Project>

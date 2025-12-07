@@ -31,3 +31,12 @@
 /Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/obj/Debug/net9.0/CodeMeet.Api.pdb
 /Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/obj/Debug/net9.0/CodeMeet.Api.genruntimeconfig.cache
 /Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/obj/Debug/net9.0/ref/CodeMeet.Api.dll
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/CodeMeet.Application.dll
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/CodeMeet.Domain.dll
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/CodeMeet.Infrastructure.dll
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/CodeMeet.Infrastructure.pdb
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/CodeMeet.Application.pdb
+/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Api/bin/Debug/net9.0/CodeMeet.Domain.pdb
