@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Domain;
 
 namespace CodeMeet.Ddd.Infrastructure;
@@ -27,6 +29,41 @@ public interface IRepository<TAggregateRoot, in TId>
     /// <param name="token"></param>
     /// <returns></returns>
     Task<IReadOnlyList<TAggregateRoot>> GetListAsync(CancellationToken token = default);
+
+    /// <summary>
+    /// Finds the first aggregate matching the predicate, returns null if not found.
+    /// </summary>
+    Task<TAggregateRoot?> FindAsync(Expression<Func<TAggregateRoot, bool>> predicate, CancellationToken token = default);
+
+    /// <summary>
+    /// Lists all aggregates matching the predicate.
+    /// </summary>
+    Task<IReadOnlyList<TAggregateRoot>> GetListAsync(Expression<Func<TAggregateRoot, bool>> predicate, CancellationToken token = default);
+
+    /// <summary>
+    /// Counts all aggregates matching the predicate.
+    /// </summary>
+    Task<int> CountAsync(Expression<Func<TAggregateRoot, bool>>? predicate = null, CancellationToken token = default);
+
+    /// <summary>
+    /// Checks if any aggregate matches the predicate.
+    /// </summary>
+    Task<bool> AnyAsync(Expression<Func<TAggregateRoot, bool>> predicate, CancellationToken token = default);
+
+    /// <summary>
+    /// Gets a queryable for advanced queries.
+    /// </summary>
+    IQueryable<TAggregateRoot> AsQueryable();
+
+    /// <summary>
+    /// Gets a paginated list of aggregates.
+    /// </summary>
+    Task<PaginationResult<TAggregateRoot>> GetPagedListAsync(IPaginationQuery pagination, CancellationToken token = default);
+
+    /// <summary>
+    /// Gets a paginated list of aggregates matching the predicate.
+    /// </summary>
+    Task<PaginationResult<TAggregateRoot>> GetPagedListAsync(Expression<Func<TAggregateRoot, bool>> predicate, IPaginationQuery pagination, CancellationToken token = default);
 
     /// <summary>
     /// Inserts a new aggregate.

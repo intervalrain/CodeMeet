@@ -23,6 +23,8 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, E
     public async Task<ErrorOr<UserDto>> HandleAsync(RegisterUserCommand command, CancellationToken token = default)
     {
         var username = command.Username;
+        // var existed = _repository.FindAsync(u => u)
+
         var passwordHash = _hasher.Hash(command.Password);
         
         var user = User.Create(username, passwordHash);
