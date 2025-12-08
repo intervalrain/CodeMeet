@@ -13,9 +13,9 @@ public static class CodeMeetApplicationModule
     {
         var assembly = Assembly.GetExecutingAssembly();
 
-        services.AddCqrs();
-        services.AddHandlersFromAssembly(assembly);
+        services.AddCqrs(assembly);
         services.AddValidatorsFromAssembly(assembly);
+        services.AddStandardBehaviors();
 
         return services;
     }
