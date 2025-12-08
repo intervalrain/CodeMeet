@@ -11,7 +11,7 @@ public static class CodeMeetInfrastructureModule
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
         services.AddSingleton<IRepository<User>, InMemoryUserRepository>();
         return services;
     }
