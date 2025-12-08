@@ -21,7 +21,7 @@ public class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, ErrorOr<IEnumer
 
     public async Task<ErrorOr<IEnumerable<UserDto>>> HandleAsync(GetUsersQuery query, CancellationToken token = default)
     {
-        var users = await _repository.GetListAsync();
+        var users = await _repository.GetListAsync(token);
 
         return users.Select(user => new UserDto(user.Id, user.Username)).ToErrorOr();
     }

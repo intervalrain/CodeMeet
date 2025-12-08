@@ -28,7 +28,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, ErrorOr
     public async Task<ErrorOr<AuthDto>> HandleAsync(LoginUserCommand command, CancellationToken token = default)
     {
         var username = command.Username;
-        var user = await _repository.FindAsync(user => user.Username == username);
+        var user = await _repository.FindAsync(user => user.Username == username, token);
         if (user is null)
         {
             return Error.NotFound(description: "The user is not found.");

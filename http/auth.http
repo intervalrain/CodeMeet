@@ -1,0 +1,39 @@
+@baseUrl = http://localhost:5132/api/v1
+
+### Register a new user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "Test@123456",
+    "email": "testuser@example.com"
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "Test@123456"
+}
+
+### Get all users (AllowAnonymous)
+GET {{baseUrl}}/user
+
+### Get user by ID (AllowAnonymous)
+@userId = 67a6b5e7-8b37-43db-a312-73aae228b726
+GET {{baseUrl}}/user/{{userId}}
+
+### Update Password (Requires JWT)
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdHVzZXIiLCJlbWFpbCI6InRlc3R1c2VyQGV4YW1wbGUuY29tIiwiaWQiOiJkZjRmOWYxMy1mMGU0LTQ0ZmEtOGU1Yi0xZjc3NWRhMzVkZWIiLCJleHAiOjE3NjUyMTM4NjksImlzcyI6IkNvZGVNZWV0IiwiYXVkIjoiQ29kZU1lZXQifQ.tiX8nMmEC1YkRqsWzRgfFVY3gGONi7cY1LOlWZ75jmw
+POST {{baseUrl}}/user
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "id": "67a6b5e7-8b37-43db-a312-73aae228b726",
+    "password": "Test@123456",
+    "newPassword": "NewTest@123456"
+}

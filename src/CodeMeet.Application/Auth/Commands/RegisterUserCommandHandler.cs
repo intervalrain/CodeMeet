@@ -27,7 +27,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, E
     public async Task<ErrorOr<AuthDto>> HandleAsync(RegisterUserCommand command, CancellationToken token = default)
     {
         var username = command.Username;
-        var existed = await _repository.AnyAsync(user => user.Username == username);
+        var existed = await _repository.AnyAsync(user => user.Username == username, token);
         if (existed)
         {
             return Error.Conflict(description: "The username has been registered.");
