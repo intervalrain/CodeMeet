@@ -1,5 +1,6 @@
 using System.Reflection;
 using CodeMeet.Ddd.Application.Cqrs;
+using CodeMeet.Ddd.Application.Cqrs.Audit;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Application.Cqrs.Validation;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ public static class CodeMeetDddModule
     public static IServiceCollection AddDispatcher(this IServiceCollection services)
     {
         services.AddScoped<IDispatcher, Dispatcher>();
+        services.AddScoped<IAuditContext, AuditContext>();
         return services;
     }
 
