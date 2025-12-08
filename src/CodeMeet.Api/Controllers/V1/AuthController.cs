@@ -1,6 +1,6 @@
 using Asp.Versioning;
 using CodeMeet.Api.Models.Auth;
-using CodeMeet.Application.Users.Commands;
+using CodeMeet.Application.Auth.Commands;
 using CodeMeet.Ddd.Application.Cqrs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +16,16 @@ public class AuthController(IDispatcher dispatcher) : ApiController
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto input)
     {
-        var command = new RegisterUserCommand(input.Username, input.Password);
+        var command = new RegisterUserCommand(input.Username, input.Password, input.Email);
+
+        var result = await _dispatcher.SendAsync(command);
+        return result.Match(Ok, Problem);
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginDto input)
+    {
+        var command = new LoginUserCommand(input.Username, input.Password);
 
         var result = await _dispatcher.SendAsync(command);
         return result.Match(Ok, Problem);

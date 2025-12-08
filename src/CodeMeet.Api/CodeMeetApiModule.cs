@@ -24,7 +24,7 @@ public static class CodeMeetApiModule
         });
         services.AddSwagger();
         services.AddApplication(configuration);
-        services.AddInfrastructure();
+        services.AddInfrastructure(configuration);
 
         return services;
     }
