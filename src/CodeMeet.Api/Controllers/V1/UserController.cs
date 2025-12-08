@@ -1,10 +1,12 @@
+using Asp.Versioning;
 using CodeMeet.Application.Users.Queries;
 using CodeMeet.Ddd.Application.Cqrs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CodeMeet.Api.Controllers;
+namespace CodeMeet.Api.Controllers.V1;
 
+[ApiVersion("1.0")]
 [AllowAnonymous]
 public class UserController(IDispatcher dispatcher) : ApiController
 {

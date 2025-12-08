@@ -7,7 +7,7 @@ namespace CodeMeet.Api.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class ApiController : ControllerBase
 {
     protected ActionResult Problem(List<Error> errors)
