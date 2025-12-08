@@ -5,7 +5,7 @@ namespace CodeMeet.Ddd.Domain;
 /// and the only entry point for modifying a cluster of entities.
 /// </summary>
 /// <typeparam name="TId">The type of aggregate root identifier.</typeparam>
-public abstract class AggregationRoot<TId> : Entity<TId>
+public abstract class AggregationRoot<TId>(TId id) : Entity<TId>(id)
     where TId : notnull
 {
     private readonly List<IDomainEvent> _domainEvents = [];
@@ -27,4 +27,4 @@ public abstract class AggregationRoot<TId> : Entity<TId>
 /// <summary>
 /// Aggregate root with Guid identifier.
 /// </summary>
-public abstract class AggregationRoot : AggregationRoot<Guid>;
+public abstract class AggregationRoot() : AggregationRoot<Guid>(Guid.NewGuid());

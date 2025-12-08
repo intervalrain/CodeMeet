@@ -30,6 +30,9 @@
               "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Application/CodeMeet.Application.csproj": {
                 "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Application/CodeMeet.Application.csproj"
               },
+              "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj": {
+                "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj"
+              },
               "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Infrastructure/CodeMeet.Infrastructure.csproj": {
                 "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Infrastructure/CodeMeet.Infrastructure.csproj"
               }
@@ -52,13 +55,17 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "ErrorOr": {
+              "target": "Package",
+              "version": "[2.0.1, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[10.0.1, )"
+              "version": "[7.2.0, )"
             }
           },
           "imports": [
@@ -107,6 +114,9 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
+              "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj": {
+                "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj"
+              },
               "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Domain/CodeMeet.Domain.csproj": {
                 "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Domain/CodeMeet.Domain.csproj"
               }
@@ -128,6 +138,90 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "DependencyInjection": {
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "ErrorOr": {
+              "target": "Package",
+              "version": "[2.0.1, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj",
+        "projectName": "CodeMeet.Ddd",
+        "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj",
+        "packagesPath": "/Users/rainhu/.nuget/packages/",
+        "outputPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/rainhu/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -170,7 +264,11 @@
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj": {
+                "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -233,6 +331,9 @@
             "projectReferences": {
               "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Application/CodeMeet.Application.csproj": {
                 "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Application/CodeMeet.Application.csproj"
+              },
+              "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj": {
+                "projectPath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Ddd/CodeMeet.Ddd.csproj"
               }
             }
           }
@@ -252,6 +353,12 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

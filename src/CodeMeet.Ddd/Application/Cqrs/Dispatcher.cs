@@ -39,7 +39,7 @@ public sealed class Dispatcher(IServiceProvider serviceProvider) : IDispatcher
 
     private static HandlerInvoker CreateQueryInvoker<TResult>(Type queryType)
     {
-        var handlerType = typeof(ICommandHandler<,>).MakeGenericType(queryType, typeof(TResult));
+        var handlerType = typeof(IQueryHandler<,>).MakeGenericType(queryType, typeof(TResult));
         return new QueryHandlerInvoker(queryType, handlerType);
     }
 }

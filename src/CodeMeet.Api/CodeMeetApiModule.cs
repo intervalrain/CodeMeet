@@ -1,12 +1,28 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
+using CodeMeet.Application;
+using CodeMeet.Infrastructure;
 
 namespace CodeMeet.Api;
 
 public static class CodeMeetApiModule
 {
     public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddControllers();
+        services.AddSwagger();
+        services.AddApplication(configuration);
+        services.AddInfrastructure();
+
+        return services;
+    }
+
+    public static WebApplication UseApi(this WebApplication app)
+    {
+        app.MapControllers();
+        return app;
+    }
+
+    private static IServiceCollection AddSwagger(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
@@ -19,11 +35,6 @@ public static class CodeMeetApiModule
         });
 
         return services;
-    }
-
-    public static WebApplication UseApi(this WebApplication app)
-    {
-        return app;
     }
 
     public static WebApplication UseSwaggerUI(this WebApplication app)

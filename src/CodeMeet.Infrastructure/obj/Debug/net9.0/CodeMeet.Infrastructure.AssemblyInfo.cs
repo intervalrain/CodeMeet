@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CodeMeet.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f3532de0cb189d7acf9bca2509a1982e3a264ba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f4e0fc87b0a455bfd7447b5949adbf11b25e906")]
 [assembly: System.Reflection.AssemblyProductAttribute("CodeMeet.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CodeMeet.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

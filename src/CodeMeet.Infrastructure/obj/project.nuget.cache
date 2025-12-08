@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "AoSGlAy2fmI=",
+  "dgSpecHash": "XiLhL02FJSM=",
   "success": true,
   "projectFilePath": "/Users/rainhu/workspace/CodeMeet/src/CodeMeet.Infrastructure/CodeMeet.Infrastructure.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/rainhu/.nuget/packages/dependencyinjection/1.2.0/dependencyinjection.1.2.0.nupkg.sha512",
+    "/Users/rainhu/.nuget/packages/erroror/2.0.1/erroror.2.0.1.nupkg.sha512",
+    "/Users/rainhu/.nuget/packages/microsoft.extensions.configuration/10.0.0/microsoft.extensions.configuration.10.0.0.nupkg.sha512",
+    "/Users/rainhu/.nuget/packages/microsoft.extensions.configuration.abstractions/10.0.0/microsoft.extensions.configuration.abstractions.10.0.0.nupkg.sha512",
+    "/Users/rainhu/.nuget/packages/microsoft.extensions.dependencyinjection/10.0.0/microsoft.extensions.dependencyinjection.10.0.0.nupkg.sha512",
+    "/Users/rainhu/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/10.0.0/microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512",
+    "/Users/rainhu/.nuget/packages/microsoft.extensions.primitives/10.0.0/microsoft.extensions.primitives.10.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
