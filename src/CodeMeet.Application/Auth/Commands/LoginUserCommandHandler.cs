@@ -1,5 +1,6 @@
 using CodeMeet.Application.Auth.Dtos;
 using CodeMeet.Application.Common.Security;
+using CodeMeet.Application.Users.Dtos;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Infrastructure;
 using CodeMeet.Domain.Users.Entities;
@@ -40,6 +41,6 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, ErrorOr
         
         var jwtToken = _jwtTokenGenerator.GenerateToken(user.Id, username, user.Email);
 
-        return new AuthDto(user.Id, user.Username, jwtToken).ToErrorOr();
+        return new AuthDto(UserDto.FromEntity(user), jwtToken).ToErrorOr();
     }
 }

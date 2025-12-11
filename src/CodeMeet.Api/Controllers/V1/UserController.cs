@@ -19,9 +19,8 @@ public class UserController(IDispatcher dispatcher) : ApiController
     public async Task<IActionResult> GetAllUsers()
     {
         var query = new GetUsersQuery();
-
         var result = await _dispatcher.QueryAsync(query);
-        return result.Match(Ok, Problem);
+        return Result(result);
     }
 
     [HttpGet("{id:guid}")]
@@ -29,17 +28,21 @@ public class UserController(IDispatcher dispatcher) : ApiController
     public async Task<IActionResult> GetUser(Guid id)
     {
         var query = new GetUserQuery(id);
-
         var result = await _dispatcher.QueryAsync(query);
-        return result.Match(Ok, Problem);
+        return Result(result);
+    }
+
+    [HttpGet("me")]
+    public Task<IActionResult> Me()
+    {
+        return Task.FromResult<IActionResult>(Ok());
     }
 
     [HttpPost]
     public async Task<IActionResult> UpdateUserPassword(UpdateUserDto input)
     {
         var command = new UpdateUserCommand(input.Id, input.Password, input.NewPassword);
-
         var result = await _dispatcher.SendAsync(command);
-        return result.Match(Ok, Problem);
+        return Result(result);
     }
 }

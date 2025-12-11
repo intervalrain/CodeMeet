@@ -1,6 +1,7 @@
+using CodeMeet.Application.Users.Dtos;
+
 namespace CodeMeet.Application.Auth.Dtos;
 
 public record AuthDto(
-    Guid UserId,
-    string Username,
+    UserDto User,
     string Token);

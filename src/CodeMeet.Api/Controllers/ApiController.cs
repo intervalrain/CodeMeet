@@ -1,3 +1,5 @@
+using CodeMeet.Api.Common.Responses;
+using CodeMeet.Ddd.Application.Cqrs.Models;
 using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,16 @@ namespace CodeMeet.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ApiController : ControllerBase
 {
+    protected IActionResult Result<T>(ErrorOr<T> result) =>
+        result.Match(v => Ok(v), Problem);
+
+    protected IActionResult Paged<T>(ErrorOr<PaginationResult<T>> result) =>
+        result.Match(
+            v => Ok(new PaginatedResponse<T>(
+                v.Items,
+                new PaginationInfo(v.Page, v.PageSize, v.TotalCount, v.TotalPages))),
+            Problem);
+
     protected ActionResult Problem(List<Error> errors)
     {
         if (errors.Count is 0)

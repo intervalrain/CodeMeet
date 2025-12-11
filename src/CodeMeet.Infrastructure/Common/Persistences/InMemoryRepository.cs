@@ -74,7 +74,7 @@ public class InMemoryRepository<TAggregateRoot, TId> : IRepository<TAggregateRoo
             .Take(pagination.Take)
             .ToList();
 
-        return Task.FromResult(new PaginationResult<TAggregateRoot>(totalCount, entities));
+        return Task.FromResult(new PaginationResult<TAggregateRoot>(pagination.PageNumber, pagination.PageSize, totalCount, entities));
     }
 
     public Task<PaginationResult<TAggregateRoot>> GetPagedListAsync(Expression<Func<TAggregateRoot, bool>> predicate, IPaginationQuery pagination, CancellationToken token = default)
@@ -87,7 +87,7 @@ public class InMemoryRepository<TAggregateRoot, TId> : IRepository<TAggregateRoo
             .Take(pagination.Take)
             .ToList();
 
-        return Task.FromResult(new PaginationResult<TAggregateRoot>(totalCount, entities));
+        return Task.FromResult(new PaginationResult<TAggregateRoot>(pagination.PageNumber, pagination.PageSize, totalCount, entities));
     }
 
     public Task InsertAsync(TAggregateRoot entity, CancellationToken token = default)

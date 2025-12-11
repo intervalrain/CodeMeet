@@ -69,25 +69,38 @@ sequenceDiagram
 
 ### 成功回應
 
+直接返回資料，不做額外包裝：
+
 ```json
-{
-  "success": true,
-  "data": { ... },
-  "timestamp": "2025-12-08T10:30:00Z"
-}
+{ "id": "...", "username": "..." }
 ```
 
 ### 錯誤回應
 
+使用 RFC 7807 ProblemDetails 格式：
+
 ```json
 {
-  "success": false,
-  "error": {
-    "code": "USER_NOT_FOUND",
-    "message": "使用者不存在",
-    "details": {}
+  "type": "https://tools.ietf.org/html/rfc7807",
+  "title": "Not Found",
+  "status": 404,
+  "detail": "使用者不存在",
+  "traceId": "00-abc123..."
+}
+```
+
+### 驗證錯誤回應
+
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc7807",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "errors": {
+    "Email": ["Email is required"],
+    "Password": ["Password must be at least 8 characters"]
   },
-  "timestamp": "2025-12-08T10:30:00Z"
+  "traceId": "00-abc123..."
 }
 ```
 
@@ -95,17 +108,13 @@ sequenceDiagram
 
 ```json
 {
-  "success": true,
-  "data": {
-    "items": [...],
-    "pagination": {
-      "page": 1,
-      "pageSize": 20,
-      "totalItems": 100,
-      "totalPages": 5
-    }
-  },
-  "timestamp": "2025-12-08T10:30:00Z"
+  "items": [...],
+  "pagination": {
+    "page": 1,
+    "pageSize": 20,
+    "totalItems": 100,
+    "totalPages": 5
+  }
 }
 ```
 
@@ -137,13 +146,10 @@ POST /api/v1/users/register
 **Response** (201 Created):
 ```json
 {
-  "success": true,
-  "data": {
-    "userId": "usr_1234567890",
-    "email": "user@example.com",
-    "displayName": "John Doe",
-    "createdAt": "2025-12-08T10:30:00Z"
-  }
+  "userId": "usr_1234567890",
+  "email": "user@example.com",
+  "displayName": "John Doe",
+  "createdAt": "2025-12-08T10:30:00Z"
 }
 ```
 
@@ -170,16 +176,13 @@ POST /api/v1/auth/login
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refreshToken": "refresh_token_here",
-    "expiresIn": 3600,
-    "user": {
-      "userId": "usr_1234567890",
-      "email": "user@example.com",
-      "displayName": "John Doe"
-    }
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "refresh_token_here",
+  "expiresIn": 3600,
+  "user": {
+    "userId": "usr_1234567890",
+    "email": "user@example.com",
+    "displayName": "John Doe"
   }
 }
 ```
@@ -196,19 +199,16 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "userId": "usr_1234567890",
-    "email": "user@example.com",
-    "displayName": "John Doe",
-    "preferences": {
-      "languages": ["JavaScript", "Python"],
-      "difficulty": "Medium",
-      "enableVideo": true
-    },
-    "opportunities": 1,
-    "createdAt": "2025-12-08T10:30:00Z"
-  }
+  "userId": "usr_1234567890",
+  "email": "user@example.com",
+  "displayName": "John Doe",
+  "preferences": {
+    "languages": ["JavaScript", "Python"],
+    "difficulty": "Medium",
+    "enableVideo": true
+  },
+  "opportunities": 1,
+  "createdAt": "2025-12-08T10:30:00Z"
 }
 ```
 
@@ -236,15 +236,12 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "preferences": {
-      "languages": ["TypeScript", "Go"],
-      "difficulty": "Hard",
-      "enableVideo": false
-    },
-    "updatedAt": "2025-12-08T11:00:00Z"
-  }
+  "preferences": {
+    "languages": ["TypeScript", "Go"],
+    "difficulty": "Hard",
+    "enableVideo": false
+  },
+  "updatedAt": "2025-12-08T11:00:00Z"
 }
 ```
 
@@ -275,13 +272,10 @@ Authorization: Bearer <token>
 **Response** (202 Accepted):
 ```json
 {
-  "success": true,
-  "data": {
-    "queueId": "queue_1234567890",
-    "status": "waiting",
-    "estimatedWaitTime": 30,
-    "enteredAt": "2025-12-08T11:00:00Z"
-  }
+  "queueId": "queue_1234567890",
+  "status": "waiting",
+  "estimatedWaitTime": 30,
+  "enteredAt": "2025-12-08T11:00:00Z"
 }
 ```
 
@@ -312,15 +306,12 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "queueId": "queue_1234567890",
-    "status": "matched",
-    "matchId": "match_9876543210",
-    "partner": {
-      "displayName": "Jane Smith",
-      "role": "interviewer"
-    }
+  "queueId": "queue_1234567890",
+  "status": "matched",
+  "matchId": "match_9876543210",
+  "partner": {
+    "displayName": "Jane Smith",
+    "role": "interviewer"
   }
 }
 ```
@@ -343,34 +334,31 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "matchId": "match_9876543210",
-    "participants": [
-      {
-        "userId": "usr_1234567890",
-        "role": "interviewee",
-        "displayName": "John Doe"
-      },
-      {
-        "userId": "usr_0987654321",
-        "role": "interviewer",
-        "displayName": "Jane Smith"
-      }
-    ],
-    "question": {
-      "questionId": "q_111222333",
-      "title": "Two Sum",
-      "difficulty": "Easy"
+  "matchId": "match_9876543210",
+  "participants": [
+    {
+      "userId": "usr_1234567890",
+      "role": "interviewee",
+      "displayName": "John Doe"
     },
-    "room": {
-      "roomId": "room_555666777",
-      "videoUrl": "https://video.codemeet.com/room_555666777",
-      "editorUrl": "wss://editor.codemeet.com/room_555666777"
-    },
-    "status": "active",
-    "createdAt": "2025-12-08T11:05:00Z"
-  }
+    {
+      "userId": "usr_0987654321",
+      "role": "interviewer",
+      "displayName": "Jane Smith"
+    }
+  ],
+  "question": {
+    "questionId": "q_111222333",
+    "title": "Two Sum",
+    "difficulty": "Easy"
+  },
+  "room": {
+    "roomId": "room_555666777",
+    "videoUrl": "https://video.codemeet.com/room_555666777",
+    "editorUrl": "wss://editor.codemeet.com/room_555666777"
+  },
+  "status": "active",
+  "createdAt": "2025-12-08T11:05:00Z"
 }
 ```
 
@@ -388,31 +376,28 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "questionId": "q_111222333",
-    "title": "Two Sum",
-    "difficulty": "Easy",
-    "category": "Array",
-    "description": "Given an array of integers nums and an integer target...",
-    "examples": [
-      {
-        "input": "nums = [2,7,11,15], target = 9",
-        "output": "[0,1]",
-        "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."
-      }
-    ],
-    "constraints": [
-      "2 <= nums.length <= 10^4",
-      "-10^9 <= nums[i] <= 10^9"
-    ],
-    "hints": [
-      "Use a hash map to store the numbers you've seen so far"
-    ],
-    "starterCode": {
-      "javascript": "function twoSum(nums, target) {\n  // Your code here\n}",
-      "python": "def two_sum(nums, target):\n    # Your code here\n    pass"
+  "questionId": "q_111222333",
+  "title": "Two Sum",
+  "difficulty": "Easy",
+  "category": "Array",
+  "description": "Given an array of integers nums and an integer target...",
+  "examples": [
+    {
+      "input": "nums = [2,7,11,15], target = 9",
+      "output": "[0,1]",
+      "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."
     }
+  ],
+  "constraints": [
+    "2 <= nums.length <= 10^4",
+    "-10^9 <= nums[i] <= 10^9"
+  ],
+  "hints": [
+    "Use a hash map to store the numbers you've seen so far"
+  ],
+  "starterCode": {
+    "javascript": "function twoSum(nums, target) {\n  // Your code here\n}",
+    "python": "def two_sum(nums, target):\n    # Your code here\n    pass"
   }
 }
 ```
@@ -440,22 +425,19 @@ Authorization: Bearer <admin_token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "items": [
-      {
-        "questionId": "q_111222333",
-        "title": "Two Sum",
-        "difficulty": "Easy",
-        "category": "Array"
-      }
-    ],
-    "pagination": {
-      "page": 1,
-      "pageSize": 20,
-      "totalItems": 150,
-      "totalPages": 8
+  "items": [
+    {
+      "questionId": "q_111222333",
+      "title": "Two Sum",
+      "difficulty": "Easy",
+      "category": "Array"
     }
+  ],
+  "pagination": {
+    "page": 1,
+    "pageSize": 20,
+    "totalItems": 150,
+    "totalPages": 8
   }
 }
 ```
@@ -491,13 +473,10 @@ Authorization: Bearer <system_token>
 **Response** (201 Created):
 ```json
 {
-  "success": true,
-  "data": {
-    "roomId": "room_555666777",
-    "videoUrl": "https://video.codemeet.com/room_555666777",
-    "editorUrl": "wss://editor.codemeet.com/room_555666777",
-    "expiresAt": "2025-12-08T12:05:00Z"
-  }
+  "roomId": "room_555666777",
+  "videoUrl": "https://video.codemeet.com/room_555666777",
+  "editorUrl": "wss://editor.codemeet.com/room_555666777",
+  "expiresAt": "2025-12-08T12:05:00Z"
 }
 ```
 
@@ -513,13 +492,10 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "roomId": "room_555666777",
-    "accessToken": "room_access_token_here",
-    "videoToken": "video_service_token",
-    "editorToken": "editor_service_token"
-  }
+  "roomId": "room_555666777",
+  "accessToken": "room_access_token_here",
+  "videoToken": "video_service_token",
+  "editorToken": "editor_service_token"
 }
 ```
 
@@ -542,15 +518,12 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "sessionId": "session_123456",
-    "startedAt": "2025-12-08T11:10:00Z",
-    "questionDetails": {
-      "questionId": "q_111222333",
-      "title": "Two Sum",
-      "difficulty": "Easy"
-    }
+  "sessionId": "session_123456",
+  "startedAt": "2025-12-08T11:10:00Z",
+  "questionDetails": {
+    "questionId": "q_111222333",
+    "title": "Two Sum",
+    "difficulty": "Easy"
   }
 }
 ```
@@ -584,20 +557,17 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "submissionId": "sub_789012",
-    "status": "accepted",
-    "results": [
-      {
-        "testCase": 1,
-        "passed": true,
-        "runtime": "52ms",
-        "memory": "42.1MB"
-      }
-    ],
-    "submittedAt": "2025-12-08T11:20:00Z"
-  }
+  "submissionId": "sub_789012",
+  "status": "accepted",
+  "results": [
+    {
+      "testCase": 1,
+      "passed": true,
+      "runtime": "52ms",
+      "memory": "42.1MB"
+    }
+  ],
+  "submittedAt": "2025-12-08T11:20:00Z"
 }
 ```
 
@@ -634,11 +604,8 @@ Authorization: Bearer <token>
 **Response** (201 Created):
 ```json
 {
-  "success": true,
-  "data": {
-    "feedbackId": "fb_345678",
-    "createdAt": "2025-12-08T11:55:00Z"
-  }
+  "feedbackId": "fb_345678",
+  "createdAt": "2025-12-08T11:55:00Z"
 }
 ```
 
@@ -657,16 +624,13 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "sessionId": "session_123456",
-    "duration": 3540,
-    "endedAt": "2025-12-08T12:00:00Z",
-    "summary": {
-      "questionsAsked": 3,
-      "solutionsSubmitted": 2,
-      "feedbackExchanged": true
-    }
+  "sessionId": "session_123456",
+  "duration": 3540,
+  "endedAt": "2025-12-08T12:00:00Z",
+  "summary": {
+    "questionsAsked": 3,
+    "solutionsSubmitted": 2,
+    "feedbackExchanged": true
   }
 }
 ```
@@ -683,36 +647,33 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "items": [
-      {
-        "sessionId": "session_123456",
-        "roomId": "room_555666777",
-        "myRole": "interviewee",
-        "partner": {
-          "displayName": "Jane Smith",
-          "role": "interviewer"
-        },
-        "question": {
-          "title": "Two Sum",
-          "difficulty": "Easy"
-        },
-        "duration": 3540,
-        "feedback": {
-          "rating": 4,
-          "comment": "Good problem-solving approach..."
-        },
-        "startedAt": "2025-12-08T11:10:00Z",
-        "endedAt": "2025-12-08T12:00:00Z"
-      }
-    ],
-    "pagination": {
-      "page": 1,
-      "pageSize": 10,
-      "totalItems": 25,
-      "totalPages": 3
+  "items": [
+    {
+      "sessionId": "session_123456",
+      "roomId": "room_555666777",
+      "myRole": "interviewee",
+      "partner": {
+        "displayName": "Jane Smith",
+        "role": "interviewer"
+      },
+      "question": {
+        "title": "Two Sum",
+        "difficulty": "Easy"
+      },
+      "duration": 3540,
+      "feedback": {
+        "rating": 4,
+        "comment": "Good problem-solving approach..."
+      },
+      "startedAt": "2025-12-08T11:10:00Z",
+      "endedAt": "2025-12-08T12:00:00Z"
     }
+  ],
+  "pagination": {
+    "page": 1,
+    "pageSize": 10,
+    "totalItems": 25,
+    "totalPages": 3
   }
 }
 ```
@@ -731,32 +692,29 @@ Authorization: Bearer <token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "userId": "usr_1234567890",
-    "opportunities": 2,
-    "nextResetAt": "2025-12-09T00:00:00Z",
-    "history": [
-      {
-        "type": "consumed",
-        "amount": -1,
-        "reason": "Started interview as interviewee",
-        "timestamp": "2025-12-08T11:10:00Z"
-      },
-      {
-        "type": "earned",
-        "amount": 1,
-        "reason": "Completed interview as interviewer",
-        "timestamp": "2025-12-08T10:00:00Z"
-      },
-      {
-        "type": "reset",
-        "amount": 1,
-        "reason": "Daily reset",
-        "timestamp": "2025-12-08T00:00:00Z"
-      }
-    ]
-  }
+  "userId": "usr_1234567890",
+  "opportunities": 2,
+  "nextResetAt": "2025-12-09T00:00:00Z",
+  "history": [
+    {
+      "type": "consumed",
+      "amount": -1,
+      "reason": "Started interview as interviewee",
+      "timestamp": "2025-12-08T11:10:00Z"
+    },
+    {
+      "type": "earned",
+      "amount": 1,
+      "reason": "Completed interview as interviewer",
+      "timestamp": "2025-12-08T10:00:00Z"
+    },
+    {
+      "type": "reset",
+      "amount": 1,
+      "reason": "Daily reset",
+      "timestamp": "2025-12-08T00:00:00Z"
+    }
+  ]
 }
 ```
 
@@ -786,12 +744,9 @@ Authorization: Bearer <system_token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "opportunities": 0,
-    "consumed": 1,
-    "timestamp": "2025-12-08T11:10:00Z"
-  }
+  "opportunities": 0,
+  "consumed": 1,
+  "timestamp": "2025-12-08T11:10:00Z"
 }
 ```
 
@@ -824,12 +779,9 @@ Authorization: Bearer <system_token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "opportunities": 2,
-    "earned": 1,
-    "timestamp": "2025-12-08T12:00:00Z"
-  }
+  "opportunities": 2,
+  "earned": 1,
+  "timestamp": "2025-12-08T12:00:00Z"
 }
 ```
 
@@ -850,11 +802,8 @@ Authorization: Bearer <system_token>
 **Response** (200 OK):
 ```json
 {
-  "success": true,
-  "data": {
-    "affectedUsers": 1523,
-    "resetAt": "2025-12-09T00:00:00Z"
-  }
+  "affectedUsers": 1523,
+  "resetAt": "2025-12-09T00:00:00Z"
 }
 ```
 
