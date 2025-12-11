@@ -1,5 +1,5 @@
 using CodeMeet.Api;
-
+using CodeMeet.Api.Extensions;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -21,6 +21,8 @@ try
 
     var app = builder.Build();
     {
+        await app.SeedDataAsync();
+
         app.UseSerilogRequestLogging();
         app.UseApi();
 

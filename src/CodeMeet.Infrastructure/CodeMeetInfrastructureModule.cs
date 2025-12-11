@@ -5,6 +5,7 @@ using CodeMeet.Ddd.Infrastructure;
 using CodeMeet.Infrastructure.Common.Persistence;
 using CodeMeet.Infrastructure.Common.Persistence.InMemory;
 using CodeMeet.Infrastructure.Common.Persistence.JsonFile;
+using CodeMeet.Infrastructure.Common.Persistence.Seeders;
 using CodeMeet.Infrastructure.Common.Security;
 using CodeMeet.Infrastructure.Gamification;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,10 @@ public static class CodeMeetInfrastructureModule
 
         // persistences
         services.AddPersistence(configuration);
+
+        // seeders
+        services.Configure<AdminSeederOptions>(configuration.GetSection(AdminSeederOptions.SectionName));
+        services.AddScoped<IDataSeeder, AdminUserSeeder>();
 
         // gamification
         services.AddScoped<IGamificationService, GamificationService>();
