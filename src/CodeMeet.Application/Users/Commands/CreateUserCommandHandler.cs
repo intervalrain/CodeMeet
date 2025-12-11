@@ -35,7 +35,7 @@ public class CreateUserCommandHandler(IPasswordHasher hasher, IRepository<User> 
         var user = User.Create(username, passwordHash, email, command.DisplayName);
         var jwtToken = jwtTokenGenerator.GenerateToken(user.Id, username, email);
 
-        await repository.InsertAsync(user);
+        await repository.InsertAsync(user, token);
 
         return new AuthDto(UserDto.FromEntity(user), jwtToken).ToErrorOr();   
     }

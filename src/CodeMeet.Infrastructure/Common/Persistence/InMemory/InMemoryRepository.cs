@@ -4,7 +4,7 @@ using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Domain;
 using CodeMeet.Ddd.Infrastructure;
 
-namespace CodeMeet.Infrastructure.Common.Persistences;
+namespace CodeMeet.Infrastructure.Common.Persistence.InMemory;
 
 public class InMemoryRepository<TAggregateRoot, TId> : IRepository<TAggregateRoot, TId>
     where TAggregateRoot : AggregationRoot<TId>

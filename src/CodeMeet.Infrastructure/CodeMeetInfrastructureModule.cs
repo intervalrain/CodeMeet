@@ -2,7 +2,9 @@ using CodeMeet.Application.Common.Security;
 using CodeMeet.Application.Gamification;
 using CodeMeet.Ddd.Application.Cqrs.Authorization;
 using CodeMeet.Ddd.Infrastructure;
-using CodeMeet.Infrastructure.Common.Persistences;
+using CodeMeet.Infrastructure.Common.Persistence;
+using CodeMeet.Infrastructure.Common.Persistence.InMemory;
+using CodeMeet.Infrastructure.Common.Persistence.JsonFile;
 using CodeMeet.Infrastructure.Common.Security;
 using CodeMeet.Infrastructure.Gamification;
 using Microsoft.Extensions.Configuration;
@@ -26,12 +28,37 @@ public static class CodeMeetInfrastructureModule
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.Section));
 
         // persistences
-        services.AddSingleton(typeof(IRepository<>), typeof(InMemoryRepository<>));
-        services.AddSingleton(typeof(IRepository<,>), typeof(InMemoryRepository<,>));
-        services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
+        services.AddPersistence(configuration);
 
         // gamification
         services.AddScoped<IGamificationService, GamificationService>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<PersistenceOptions>(configuration.GetSection(PersistenceOptions.SectionName));
+
+        var options = configuration.GetSection(PersistenceOptions.SectionName).Get<PersistenceOptions>()
+            ?? new PersistenceOptions();
+
+        switch (options.Provider)
+        {
+            case PersistenceProvider.JsonFile:
+                services.AddSingleton<JsonFileRepositoryRegistry>();
+                services.AddSingleton(typeof(IRepository<>), typeof(JsonFileRepository<>));
+                services.AddSingleton(typeof(IRepository<,>), typeof(JsonFileRepository<,>));
+                services.AddScoped<IUnitOfWork, JsonFileUnitOfWork>();
+                break;
+
+            case PersistenceProvider.InMemory:
+            default:
+                services.AddSingleton(typeof(IRepository<>), typeof(InMemoryRepository<>));
+                services.AddSingleton(typeof(IRepository<,>), typeof(InMemoryRepository<,>));
+                services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
+                break;
+        }
 
         return services;
     }

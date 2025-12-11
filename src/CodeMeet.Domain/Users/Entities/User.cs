@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using CodeMeet.Ddd.Domain;
 using CodeMeet.Domain.Users.Events;
 using CodeMeet.Domain.Users.ValueObjects;
@@ -16,7 +17,8 @@ public class User : AggregationRoot
     public DateTime CreatedAt { get; }
     public DateTime UpdatedAt { get; private set; }
 
-    private User() { } // EF Usage
+    [JsonConstructor]
+    private User() { } // EF / JSON deserialization
 
     private User(string username, string passwordHash, string email, string? displayName)
     {

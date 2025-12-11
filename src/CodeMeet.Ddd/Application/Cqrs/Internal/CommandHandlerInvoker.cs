@@ -1,5 +1,3 @@
-using CodeMeet.Ddd.Application.Cqrs.Models;
-
 namespace CodeMeet.Ddd.Application.Cqrs.Internal;
 
 public sealed class CommandHandlerInvoker(Type commandType, Type handlerType) : HandlerInvoker

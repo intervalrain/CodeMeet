@@ -13,20 +13,14 @@ namespace CodeMeet.Ddd.Application.Cqrs.Behaviors;
 /// </summary>
 /// <typeparam name="TRequest">The type of request.</typeparam>
 /// <typeparam name="TResponse">The type of response (must implement IErrorOr).</typeparam>
-public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class AuthorizationBehavior<TRequest, TResponse>(
+    IAuthorizationService authorizationService,
+    IOptions<BehaviorOptions> options) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IAuthorizeableRequest<TResponse>
     where TResponse : IErrorOr
 {
-    private readonly IAuthorizationService _authorizationService;
-    private readonly AuthorizationBehaviorOptions _options;
-
-    public AuthorizationBehavior(
-        IAuthorizationService authorizationService,
-        IOptions<BehaviorOptions> options)
-    {
-        _authorizationService = authorizationService;
-        _options = options.Value.Authorization;
-    }
+    private readonly IAuthorizationService _authorizationService = authorizationService;
+    private readonly AuthorizationBehaviorOptions _options = options.Value.Authorization;
 
     public async Task<TResponse> HandleAsync(
         TRequest request,

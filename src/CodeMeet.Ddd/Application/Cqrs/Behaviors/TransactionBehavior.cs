@@ -11,17 +11,11 @@ namespace CodeMeet.Ddd.Application.Cqrs.Behaviors;
 /// </summary>
 /// <typeparam name="TRequest">The type of request.</typeparam>
 /// <typeparam name="TResult">The type of result.</typeparam>
-public sealed class TransactionBehavior<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
+public sealed class TransactionBehavior<TRequest, TResult>(IUnitOfWork unitOfWork, IOptions<BehaviorOptions> options) : IPipelineBehavior<TRequest, TResult>
     where TRequest : notnull
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly TransactionBehaviorOptions _options;
-
-    public TransactionBehavior(IUnitOfWork unitOfWork, IOptions<BehaviorOptions> options)
-    {
-        _unitOfWork = unitOfWork;
-        _options = options.Value.Transaction;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly TransactionBehaviorOptions _options = options.Value.Transaction;
 
     public async Task<TResult> HandleAsync(TRequest request, Func<Task<TResult>> next, CancellationToken ct = default)
     {

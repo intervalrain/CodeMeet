@@ -11,19 +11,13 @@ namespace CodeMeet.Ddd.Application.Cqrs.Behaviors;
 /// </summary>
 /// <typeparam name="TRequest">The type of request.</typeparam>
 /// <typeparam name="TResult">The type of result.</typeparam>
-public sealed class LoggingBehavior<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
+public sealed class LoggingBehavior<TRequest, TResult>(
+    ILogger<LoggingBehavior<TRequest, TResult>> logger,
+    IOptions<BehaviorOptions> options) : IPipelineBehavior<TRequest, TResult>
     where TRequest : notnull
 {
-    private readonly ILogger<LoggingBehavior<TRequest, TResult>> _logger;
-    private readonly LoggingBehaviorOptions _options;
-
-    public LoggingBehavior(
-        ILogger<LoggingBehavior<TRequest, TResult>> logger,
-        IOptions<BehaviorOptions> options)
-    {
-        _logger = logger;
-        _options = options.Value.Logging;
-    }
+    private readonly ILogger<LoggingBehavior<TRequest, TResult>> _logger = logger;
+    private readonly LoggingBehaviorOptions _options = options.Value.Logging;
 
     public async Task<TResult> HandleAsync(TRequest request, Func<Task<TResult>> next, CancellationToken ct = default)
     {

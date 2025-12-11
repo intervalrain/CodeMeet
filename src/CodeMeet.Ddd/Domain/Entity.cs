@@ -4,10 +4,17 @@ namespace CodeMeet.Ddd.Domain;
 /// Base class for all entities with a identifier.
 /// </summary>
 /// <typeparam name="TId">The type of entity identifier.</typeparam>
-public abstract class Entity<TId>(TId id) : IEquatable<Entity<TId>>
+public abstract class Entity<TId> : IEquatable<Entity<TId>>
     where TId : notnull
 {
-    public TId Id { get; protected set; } = id;
+    public TId Id { get; protected set; } = default!;
+
+    protected Entity() { }
+
+    protected Entity(TId id)
+    {
+        Id = id;
+    }
 
     public override bool Equals(object? obj)
     {
@@ -40,4 +47,7 @@ public abstract class Entity<TId>(TId id) : IEquatable<Entity<TId>>
 /// <summary>
 /// Entity with Guid identifier.
 /// </summary>
-public abstract class Entity() : Entity<Guid>(Guid.NewGuid());
+public abstract class Entity : Entity<Guid>
+{
+    protected Entity() : base(Guid.NewGuid()) { }
+}

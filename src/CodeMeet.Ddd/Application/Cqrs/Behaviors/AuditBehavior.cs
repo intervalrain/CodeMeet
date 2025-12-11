@@ -13,22 +13,15 @@ namespace CodeMeet.Ddd.Application.Cqrs.Behaviors;
 /// </summary>
 /// <typeparam name="TRequest">The type of request.</typeparam>
 /// <typeparam name="TResult">The type of result.</typeparam>
-public sealed class AuditBehavior<TRequest, TResult> : IPipelineBehavior<TRequest, TResult>
+public sealed class AuditBehavior<TRequest, TResult>(
+    IAuditContext auditContext,
+    ILogger<AuditBehavior<TRequest, TResult>> logger,
+    IOptions<BehaviorOptions> options) : IPipelineBehavior<TRequest, TResult>
     where TRequest : notnull
 {
-    private readonly IAuditContext _context;
-    private readonly ILogger<AuditBehavior<TRequest, TResult>> _logger;
-    private readonly AuditBehaviorOptions _options;
-
-    public AuditBehavior(
-        IAuditContext auditContext,
-        ILogger<AuditBehavior<TRequest, TResult>> logger,
-        IOptions<BehaviorOptions> options)
-    {
-        _context = auditContext;
-        _logger = logger;
-        _options = options.Value.Audit;
-    }
+    private readonly IAuditContext _context = auditContext;
+    private readonly ILogger<AuditBehavior<TRequest, TResult>> _logger = logger;
+    private readonly AuditBehaviorOptions _options = options.Value.Audit;
 
     public async Task<TResult> HandleAsync(TRequest request, Func<Task<TResult>> next, CancellationToken token = default)
     {
