@@ -1,13 +1,15 @@
 using System.Reflection;
 using CodeMeet.Ddd.Application.Cqrs.Authorization;
+using CodeMeet.Ddd.Application.Cqrs.Behaviors.Options;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using ErrorOr;
+using Microsoft.Extensions.Options;
 
 namespace CodeMeet.Ddd.Application.Cqrs.Behaviors;
 
 /// <summary>
-/// Pipeline behavior that enforces authorization based on <see cref="AuthorizaAttribute"/> decorations.
-/// Only applies to requests that implement <see cref="IAuthorizeableRequest{TResponse}"/> 
+/// Pipeline behavior that enforces authorization based on <see cref="AuthorizeAttribute"/> decorations.
+/// Only applies to requests that implement <see cref="IAuthorizeableRequest{TResponse}"/>
 /// </summary>
 /// <typeparam name="TRequest">The type of request.</typeparam>
 /// <typeparam name="TResponse">The type of response (must implement IErrorOr).</typeparam>
@@ -16,24 +18,33 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
     where TResponse : IErrorOr
 {
     private readonly IAuthorizationService _authorizationService;
+    private readonly AuthorizationBehaviorOptions _options;
 
-    public AuthorizationBehavior(IAuthorizationService authorizationService)
+    public AuthorizationBehavior(
+        IAuthorizationService authorizationService,
+        IOptions<BehaviorOptions> options)
     {
         _authorizationService = authorizationService;
+        _options = options.Value.Authorization;
     }
 
     public async Task<TResponse> HandleAsync(
-        TRequest request, 
-        Func<Task<TResponse>> next, 
+        TRequest request,
+        Func<Task<TResponse>> next,
         CancellationToken token = default)
     {
+        if (!_options.Enabled)
+        {
+            return await next();
+        }
+
         var authorizeAttributes = request.GetType()
             .GetCustomAttributes<AuthorizeAttribute>()
             .ToList();
 
-        if (!authorizeAttributes.Any())
+        if (authorizeAttributes.Count == 0)
         {
-            return await next();   
+            return await next();
         }
 
         var requiredPermissions = authorizeAttributes

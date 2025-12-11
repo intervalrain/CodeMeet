@@ -1,5 +1,7 @@
+using CodeMeet.Ddd.Application.Cqrs.Behaviors.Options;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Application.Cqrs.Validation;
+using Microsoft.Extensions.Options;
 
 namespace CodeMeet.Ddd.Application.Cqrs.Behaviors;
 
@@ -13,14 +15,23 @@ public sealed class ValidationBehavior<TRequest, TResult> : IPipelineBehavior<TR
     where TRequest : notnull
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
+    private readonly ValidationBehaviorOptions _options;
 
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public ValidationBehavior(
+        IEnumerable<IValidator<TRequest>> validators,
+        IOptions<BehaviorOptions> options)
     {
         _validators = validators;
+        _options = options.Value.Validation;
     }
 
     public async Task<TResult> HandleAsync(TRequest request, Func<Task<TResult>> next, CancellationToken ct = default)
     {
+        if (!_options.Enabled || !_options.Scope.Matches<TRequest>())
+        {
+            return await next();
+        }
+
         var validators = _validators.ToList();
 
         if (validators.Count == 0)

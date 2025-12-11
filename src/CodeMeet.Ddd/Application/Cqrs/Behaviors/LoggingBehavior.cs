@@ -1,5 +1,8 @@
+using System.Diagnostics;
+using CodeMeet.Ddd.Application.Cqrs.Behaviors.Options;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace CodeMeet.Ddd.Application.Cqrs.Behaviors;
 
@@ -12,29 +15,50 @@ public sealed class LoggingBehavior<TRequest, TResult> : IPipelineBehavior<TRequ
     where TRequest : notnull
 {
     private readonly ILogger<LoggingBehavior<TRequest, TResult>> _logger;
+    private readonly LoggingBehaviorOptions _options;
 
-    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResult>> logger)
+    public LoggingBehavior(
+        ILogger<LoggingBehavior<TRequest, TResult>> logger,
+        IOptions<BehaviorOptions> options)
     {
         _logger = logger;
+        _options = options.Value.Logging;
     }
 
     public async Task<TResult> HandleAsync(TRequest request, Func<Task<TResult>> next, CancellationToken ct = default)
     {
+        if (!_options.Enabled || !_options.Scope.Matches<TRequest>())
+        {
+            return await next();
+        }
+
         var requestName = typeof(TRequest).Name;
 
         _logger.LogInformation("Handling {RequestName}", requestName);
 
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        var stopwatch = Stopwatch.StartNew();
 
         try
         {
             var result = await next();
             stopwatch.Stop();
 
-            _logger.LogInformation(
-                "Handled {RequestName} in {ElapsedMilliseconds}ms",
-                requestName,
-                stopwatch.ElapsedMilliseconds);
+            var elapsedMs = stopwatch.ElapsedMilliseconds;
+            if (elapsedMs > _options.SlowRequestThresholdMs)
+            {
+                _logger.LogWarning(
+                    "Slow request: {RequestName} took {ElapsedMilliseconds}ms (threshold: {ThresholdMs}ms)",
+                    requestName,
+                    elapsedMs,
+                    _options.SlowRequestThresholdMs);
+            }
+            else
+            {
+                _logger.LogInformation(
+                    "Handled {RequestName} in {ElapsedMilliseconds}ms",
+                    requestName,
+                    elapsedMs);
+            }
 
             return result;
         }

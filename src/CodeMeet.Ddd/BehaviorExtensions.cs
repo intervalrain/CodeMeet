@@ -1,4 +1,6 @@
 using CodeMeet.Ddd.Application.Cqrs.Behaviors;
+using CodeMeet.Ddd.Application.Cqrs.Behaviors.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CodeMeet.Ddd;
@@ -17,13 +19,22 @@ public static class BehaviorExtensions
     /// Note: Authorization behavior requires <see cref="IRequestAuthorizationService"/>
     /// to be registered separately (typically in the Application module).
     /// </remarks>
-    public static IServiceCollection AddStandardBehaviors(this IServiceCollection services)
+    public static IServiceCollection AddStandardBehaviors(this IServiceCollection services, IConfiguration? configuration = null)
     {
+        if (configuration is not null)
+        {
+            services.Configure<BehaviorOptions>(configuration.GetSection(BehaviorOptions.SectionName));
+        }
+        else
+        {
+            services.Configure<BehaviorOptions>(_ => { });
+        }
+
         services.AddAuditBehavior();
         services.AddLoggingBehavior();
         services.AddAuthorizationBehavior();
         services.AddValidationBehavior();
-        services.AddTransactionBehavior();   
+        services.AddTransactionBehavior();
 
         return services;
     }

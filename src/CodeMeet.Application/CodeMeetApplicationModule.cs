@@ -13,7 +13,7 @@ public static class CodeMeetApplicationModule
 
         services.AddCqrs(assembly);
         services.AddValidatorsFromAssembly(assembly);
-        services.AddStandardBehaviors();
+        services.AddStandardBehaviors(configuration);
 
         return services;
     }

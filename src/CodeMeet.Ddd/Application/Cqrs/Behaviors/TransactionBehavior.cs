@@ -1,5 +1,7 @@
+using CodeMeet.Ddd.Application.Cqrs.Behaviors.Options;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Infrastructure;
+using Microsoft.Extensions.Options;
 
 namespace CodeMeet.Ddd.Application.Cqrs.Behaviors;
 
@@ -13,29 +15,25 @@ public sealed class TransactionBehavior<TRequest, TResult> : IPipelineBehavior<T
     where TRequest : notnull
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly TransactionBehaviorOptions _options;
 
-    public TransactionBehavior(IUnitOfWork unitOfWork)
+    public TransactionBehavior(IUnitOfWork unitOfWork, IOptions<BehaviorOptions> options)
     {
         _unitOfWork = unitOfWork;
+        _options = options.Value.Transaction;
     }
 
     public async Task<TResult> HandleAsync(TRequest request, Func<Task<TResult>> next, CancellationToken ct = default)
     {
-        // Only apply transaction to commands, not queries
-        if (!IsCommand())
+        if (!_options.Enabled || !_options.Scope.Matches<TRequest>())
+        {
             return await next();
+        }
 
         var result = await next();
 
         await _unitOfWork.SaveChangesAsync(ct);
 
         return result;
-    }
-
-    private static bool IsCommand()
-    {
-        var requestType = typeof(TRequest);
-        return requestType.GetInterfaces()
-            .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommand<>));
     }
 }
