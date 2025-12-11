@@ -27,7 +27,7 @@ public static class CodeMeetInfrastructureModule
         // persistences
         services.AddSingleton(typeof(IRepository<>), typeof(InMemoryRepository<>));
         services.AddSingleton(typeof(IRepository<,>), typeof(InMemoryRepository<,>));
-        services.AddSingleton<IUnitOfWork, InMemoryUnitOfWork>();
+        services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
         
         return services;
     }

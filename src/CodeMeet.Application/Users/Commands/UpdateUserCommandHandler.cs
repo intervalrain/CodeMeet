@@ -3,7 +3,7 @@ using CodeMeet.Application.Users.Dtos;
 using CodeMeet.Ddd.Application.Cqrs.Authorization;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Infrastructure;
-using CodeMeet.Domain.Users;
+using CodeMeet.Domain.Users.Entities;
 using ErrorOr;
 
 namespace CodeMeet.Application.Users.Commands;

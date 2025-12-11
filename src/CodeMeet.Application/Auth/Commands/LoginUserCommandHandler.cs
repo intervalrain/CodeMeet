@@ -1,10 +1,8 @@
-using System.Runtime.CompilerServices;
-
 using CodeMeet.Application.Auth.Dtos;
 using CodeMeet.Application.Common.Security;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Infrastructure;
-using CodeMeet.Domain.Users;
+using CodeMeet.Domain.Users.Entities;
 
 using ErrorOr;
 

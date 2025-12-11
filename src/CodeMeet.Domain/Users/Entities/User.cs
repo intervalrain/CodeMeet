@@ -1,12 +1,17 @@
 using CodeMeet.Ddd.Domain;
+using CodeMeet.Domain.Users.Events;
 
-namespace CodeMeet.Domain.Users;
+namespace CodeMeet.Domain.Users.Entities;
 
 public class User : AggregationRoot
 {
     public string Username { get; private set; } = string.Empty;
-    public string PasswordHash { get; private set ;} = string.Empty;
-    public string Email { get; private set; } = string.Empty; 
+    public string PasswordHash { get; private set; } = string.Empty;
+    public string Email { get; private set; } = string.Empty;
+    public List<string> Roles { get; set; }= []; 
+    public List<string> Permissions { get; set; }= []; 
+    public DateTime CreatedAt { get; }
+    public DateTime UpdatedAt { get; private set; }
 
     private User() { } // EF Usage
 
@@ -15,6 +20,10 @@ public class User : AggregationRoot
         Username = username;
         PasswordHash = passwordHash;
         Email = email;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
+
+        AddDomainEvent(new UserCreatedEvent(username, email));
     }
 
     public static User Create(string username, string passwordHash, string email)
@@ -37,5 +46,6 @@ public class User : AggregationRoot
             throw new ArgumentException("Password hash cannot be empty", nameof(newPasswordHash));
 
         PasswordHash = newPasswordHash;
+        UpdatedAt = DateTime.UtcNow;
     }
 }
