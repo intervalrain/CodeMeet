@@ -61,4 +61,12 @@ public class UserController(IDispatcher dispatcher, IAuditContext auditContext) 
         var result = await dispatcher.SendAsync(command);
         return Result(result);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        var command = new DeleteUserCommand(id);
+        var result = await dispatcher.SendAsync(command);
+        return Result(result);
+    }
 }
