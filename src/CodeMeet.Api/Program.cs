@@ -1,18 +1,42 @@
 using CodeMeet.Api;
 
-var builder = WebApplication.CreateBuilder(args);
-{
-    builder.Services.AddApi(builder.Configuration);
-}
+using Serilog;
 
-var app = builder.Build();
-{
-    app.UseApi();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-    if (app.Environment.IsDevelopment())
+try
+{
+    Log.Information("Starting CodeMeet API...");
+
+    var builder = WebApplication.CreateBuilder(args);
     {
-        app.UseSwaggerUI();
+        builder.Host.UseSerilog((context, services, configuration) => configuration
+            .ReadFrom.Configuration(context.Configuration)
+            .ReadFrom.Services(services));
+
+        builder.Services.AddApi(builder.Configuration);
     }
 
-    app.Run();
+    var app = builder.Build();
+    {
+        app.UseSerilogRequestLogging();
+        app.UseApi();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwaggerUI();
+        }
+
+        app.Run();
+    }
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
