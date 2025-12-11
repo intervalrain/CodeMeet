@@ -1,7 +1,8 @@
 namespace CodeMeet.Ddd.Application.Cqrs.Models;
 
 /// <summary>
-/// Pagination query parameters.
+/// Pagination parameters without result type binding.
+/// Used by repositories and infrastructure layer.
 /// </summary>
 public interface IPaginationQuery
 {
@@ -24,4 +25,12 @@ public interface IPaginationQuery
     /// Number of items to take.
     /// </summary>
     int Take => PageSize;
+}
+
+/// <summary>
+/// Pagination query with result type binding.
+/// Used by application layer queries.
+/// </summary>
+public interface IPaginationQuery<TResult> : IPaginationQuery, IQuery<TResult>
+{
 }

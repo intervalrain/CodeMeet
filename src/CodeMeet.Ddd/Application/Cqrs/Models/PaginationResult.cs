@@ -14,4 +14,10 @@ public record PaginationResult<T>(
     /// Gets the total number of pages.
     /// </summary>
     public int TotalPages => PageSize > 0 ? (int)Math.Ceiling(TotalCount / (double)PageSize) : 0;
+
+    /// <summary>
+    /// Maps the items to a different type.
+    /// </summary>
+    public PaginationResult<TResult> Map<TResult>(Func<T, TResult> selector) =>
+        new(Page, PageSize, TotalCount, Items.Select(selector).ToList());
 }

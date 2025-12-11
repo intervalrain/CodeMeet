@@ -6,14 +6,14 @@ using ErrorOr;
 
 namespace CodeMeet.Application.Users.Queries;
 
-public record GetUsersQuery : IQuery<ErrorOr<IEnumerable<UserDto>>>;
+public record GetUsersQuery : PaginationQuery<ErrorOr<PaginationResult<UserDto>>>;
 
-public class GetUsersQueryHandler(IRepository<User> repository) : IQueryHandler<GetUsersQuery, ErrorOr<IEnumerable<UserDto>>>
+public class GetUsersQueryHandler(IRepository<User> repository) : IQueryHandler<GetUsersQuery, ErrorOr<PaginationResult<UserDto>>>
 {
-    public async Task<ErrorOr<IEnumerable<UserDto>>> HandleAsync(GetUsersQuery query, CancellationToken token = default)
+    public async Task<ErrorOr<PaginationResult<UserDto>>> HandleAsync(GetUsersQuery query, CancellationToken token = default)
     {
-        var users = await repository.GetListAsync(token);
+        var users = await repository.GetPagedListAsync(query, token);
 
-        return users.Select(UserDto.FromEntity).ToErrorOr();
+        return users.Map(UserDto.FromEntity).ToErrorOr();
     }
 }
