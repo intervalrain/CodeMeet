@@ -6,7 +6,7 @@ using ErrorOr;
 
 namespace CodeMeet.Application.Users.Queries;
 
-public record GetUsersQuery : PaginationQuery<ErrorOr<PaginationResult<UserDto>>>;
+public record GetUsersQuery(int PageNumber = 1, int PageSize = 20) : PaginationQuery<ErrorOr<PaginationResult<UserDto>>>(PageNumber, PageSize);
 
 public class GetUsersQueryHandler(IRepository<User> repository) : IQueryHandler<GetUsersQuery, ErrorOr<PaginationResult<UserDto>>>
 {
