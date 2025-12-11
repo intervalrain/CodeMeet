@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using CodeMeet.Api.Models.Users;
+using CodeMeet.Api.Contracts.Users;
 using CodeMeet.Application.Users.Commands;
 using CodeMeet.Application.Users.Queries;
 using CodeMeet.Ddd.Application.Cqrs;
@@ -43,7 +43,7 @@ public class UserController(IDispatcher dispatcher, IAuditContext auditContext, 
 
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<IActionResult> Register(CreateUserDto input)
+    public async Task<IActionResult> Register(CreateUserRequest input)
     {
         var command = new CreateUserCommand(input.Username, input.Password, input.Email, input.DisplayName);
         var result = await dispatcher.SendAsync(command);
@@ -57,7 +57,7 @@ public class UserController(IDispatcher dispatcher, IAuditContext auditContext, 
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateUser(UpdateUserDto input)
+    public async Task<IActionResult> UpdateUser(UpdateUserRequest input)
     {
         var userId = currentUserProvider.CurrentUser.Id;
         var command = new UpdateUserCommand(userId, input.Password, input.NewPassword, input.DisplayName);

@@ -57,7 +57,7 @@ sequenceDiagram
     AuthService-->>API: Valid
     API-->>Client: 200 OK + JWT Token
 
-    Client->>API: GET /api/v1/users/me (with Bearer Token)
+    Client->>API: GET /api/v1/user/me (with Bearer Token)
     API->>AuthService: Validate Token
     AuthService-->>API: Valid
     API-->>Client: 200 OK + User Data
@@ -130,7 +130,7 @@ sequenceDiagram
 **Event**: `UserRegistered`
 
 ```http
-POST /api/v1/users/register
+POST /api/v1/user/register
 ```
 
 **Request Body**:
@@ -192,7 +192,7 @@ POST /api/v1/auth/login
 ### 1.3 取得當前使用者資訊
 
 ```http
-GET /api/v1/users/me
+GET /api/v1/user/me
 Authorization: Bearer <token>
 ```
 
@@ -220,7 +220,7 @@ Authorization: Bearer <token>
 **Event**: `UserProfileUpdated`
 
 ```http
-PUT /api/v1/users/me/preferences
+PUT /api/v1/user/me/preferences
 Authorization: Bearer <token>
 ```
 

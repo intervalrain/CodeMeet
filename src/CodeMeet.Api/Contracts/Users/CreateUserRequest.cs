@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CodeMeet.Api.Models.Users;
+namespace CodeMeet.Api.Contracts.Users;
 
-public record CreateUserDto(
+public record CreateUserRequest(
     string Username,
     string Password,
     [EmailAddress] string Email,
