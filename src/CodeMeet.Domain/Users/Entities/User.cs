@@ -9,16 +9,42 @@ public class User : AggregationRoot
 {
     public string Username { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
-    public string DisplayName { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
-    public List<string> Roles { get; set; }= [];
-    public List<string> Permissions { get; set; }= [];
+    public string DisplayName { get; private set; } = string.Empty;
+    public List<string> Roles { get; private set; } = [];
+    public List<string> Permissions { get; private set; } = [];
     public UserPreferences Preferences { get; private set; } = UserPreferences.Default;
-    public DateTime CreatedAt { get; }
+    public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
+    private User() { } // EF
+
     [JsonConstructor]
-    private User() { } // EF / JSON deserialization
+    private User(
+        string username,
+        string passwordHash,
+        string email,
+        string displayName,
+        List<string>? roles,
+        List<string>? permissions,
+        UserPreferences? preferences,
+        DateTime createdAt,
+        DateTime updatedAt)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(username);
+        ArgumentException.ThrowIfNullOrEmpty(passwordHash);
+        ArgumentException.ThrowIfNullOrEmpty(email);
+        ArgumentException.ThrowIfNullOrEmpty(displayName);
+        Username = username;
+        PasswordHash = passwordHash;
+        Email = email;
+        DisplayName = displayName;
+        Roles = roles ?? [];
+        Permissions = permissions ?? [];
+        Preferences = preferences ?? UserPreferences.Default;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+    }
 
     private User(string username, string passwordHash, string email, string? displayName)
     {
@@ -52,6 +78,12 @@ public class User : AggregationRoot
             throw new ArgumentException("Password hash cannot be empty", nameof(newPasswordHash));
 
         PasswordHash = newPasswordHash;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void ChangeDisplayName(string newDisplayName)
+    {
+        DisplayName = newDisplayName;
         UpdatedAt = DateTime.UtcNow;
     }
 

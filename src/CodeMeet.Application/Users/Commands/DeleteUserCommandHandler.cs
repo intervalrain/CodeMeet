@@ -20,6 +20,11 @@ public class DeleteUserCommandHandler(IRepository<User> repository) : ICommandHa
             return Error.NotFound(description: "User not found");
         }
 
+        if (user.Roles.Contains(Role.Admin))
+        {
+            return Error.Forbidden(description: "Admin users cannot be deleted");
+        }
+
         await repository.DeleteAsync(user, token);
 
         return Result.Deleted;

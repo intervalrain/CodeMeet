@@ -11,7 +11,12 @@ public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGene
 {
     private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
-    public string GenerateToken(Guid id, string username, string email)
+    public string GenerateToken(
+        Guid id,
+        string username,
+        string email,
+        IReadOnlyList<string> roles,
+        IReadOnlyList<string> permissions)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -22,6 +27,16 @@ public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGene
             new(JwtRegisteredClaimNames.Email, email),
             new("id", id.ToString()),
         };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+
+        foreach (var permission in permissions)
+        {
+            claims.Add(new Claim("permissions", permission));
+        }
 
         var token = new JwtSecurityToken(
             _jwtSettings.Issuer,

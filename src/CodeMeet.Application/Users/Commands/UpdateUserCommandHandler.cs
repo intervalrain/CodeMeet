@@ -8,7 +8,7 @@ using ErrorOr;
 
 namespace CodeMeet.Application.Users.Commands;
 
-public record UpdateUserCommand(Guid UserId, string Password, string NewPassword) : IAuthorizeableCommand<ErrorOr<UserDto>>;
+public record UpdateUserCommand(Guid UserId, string Password, string? NewPassword, string? DisplayName) : IAuthorizeableCommand<ErrorOr<UserDto>>;
 
 public class UpdateUserCommandHandler(IRepository<User> repository, IPasswordHasher passwordHasher) : ICommandHandler<UpdateUserCommand, ErrorOr<UserDto>>
 {
@@ -25,9 +25,13 @@ public class UpdateUserCommandHandler(IRepository<User> repository, IPasswordHas
             return Error.Unauthorized(description: "Username or password not correct");
         }
 
-        user.ChangePassword(passwordHasher.Hash(command.NewPassword));
+        if (command.NewPassword != null)
+            user.ChangePassword(passwordHasher.Hash(command.NewPassword));
 
-        await repository.UpdateAsync(user);
+        if (command.DisplayName != null)
+            user.ChangeDisplayName(command.DisplayName);
+
+        await repository.UpdateAsync(user, token);
 
         return UserDto.FromEntity(user);
     }

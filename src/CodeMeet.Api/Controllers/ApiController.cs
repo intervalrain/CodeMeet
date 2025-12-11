@@ -22,6 +22,9 @@ public class ApiController : ControllerBase
                 new PaginationInfo(v.Page, v.PageSize, v.TotalCount, v.TotalPages))),
             Problem);
 
+    protected IActionResult NoContent<T>(ErrorOr<T> result) =>
+        result.Match(_ => NoContent(), Problem);
+
     protected ActionResult Problem(List<Error> errors)
     {
         if (errors.Count is 0)

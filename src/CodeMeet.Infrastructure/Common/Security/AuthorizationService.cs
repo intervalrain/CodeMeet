@@ -3,18 +3,12 @@ using ErrorOr;
 
 namespace CodeMeet.Infrastructure.Common.Security;
 
-public class AuthorizationService : IAuthorizationService
+public class AuthorizationService(
+    IPolicyEnforcer policyEnforcer,
+    ICurrentUserProvider currentUserProvider) : IAuthorizationService
 {
-    private readonly IPolicyEnforcer _policyEnforcer;
-    private readonly ICurrentUserProvider _currentUserProvider;
-
-    public AuthorizationService(
-        IPolicyEnforcer policyEnforcer,
-        ICurrentUserProvider currentUserProvider)
-    {
-        _policyEnforcer = policyEnforcer;
-        _currentUserProvider = currentUserProvider;
-    }
+    private readonly IPolicyEnforcer _policyEnforcer = policyEnforcer;
+    private readonly ICurrentUserProvider _currentUserProvider = currentUserProvider;
 
     public ErrorOr<Success> Authorize<TRequest>(
         IAuthorizeableRequest<TRequest> request, 

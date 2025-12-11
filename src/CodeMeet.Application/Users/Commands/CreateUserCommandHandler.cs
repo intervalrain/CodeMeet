@@ -33,7 +33,7 @@ public class CreateUserCommandHandler(IPasswordHasher hasher, IRepository<User> 
         var passwordHash = hasher.Hash(command.Password);
         
         var user = User.Create(username, passwordHash, email, command.DisplayName);
-        var jwtToken = jwtTokenGenerator.GenerateToken(user.Id, username, email);
+        var jwtToken = jwtTokenGenerator.GenerateToken(user.Id, username, email, user.Roles, user.Permissions);
 
         await repository.InsertAsync(user, token);
 

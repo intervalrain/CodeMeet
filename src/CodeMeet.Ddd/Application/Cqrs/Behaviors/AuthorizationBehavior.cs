@@ -61,8 +61,8 @@ public class AuthorizationBehavior<TRequest, TResponse>(
 
         var authorizationResult = _authorizationService.Authorize(
             request,
-            requiredRoles,
             requiredPermissions,
+            requiredRoles,
             requiredPolicies);
 
         if (authorizationResult.IsError)

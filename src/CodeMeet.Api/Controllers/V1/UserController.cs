@@ -4,13 +4,15 @@ using CodeMeet.Application.Users.Commands;
 using CodeMeet.Application.Users.Queries;
 using CodeMeet.Ddd.Application.Cqrs;
 using CodeMeet.Ddd.Application.Cqrs.Audit;
+using CodeMeet.Ddd.Application.Cqrs.Authorization;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeMeet.Api.Controllers.V1;
 
 [ApiVersion("1.0")]
-public class UserController(IDispatcher dispatcher, IAuditContext auditContext) : ApiController
+public class UserController(IDispatcher dispatcher, IAuditContext auditContext, ICurrentUserProvider currentUserProvider) : ApiController
 {
     [HttpGet]
     [AllowAnonymous]
@@ -47,19 +49,20 @@ public class UserController(IDispatcher dispatcher, IAuditContext auditContext) 
         var result = await dispatcher.SendAsync(command);
         return result.Match(
             v => CreatedAtAction(
-                actionName: nameof(UserController.GetUser),
+                actionName: nameof(GetUser),
                 controllerName: "User",
                 routeValues: new { id = v.User.Id },
                 value: v),
             Problem);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateUserPassword(UpdateUserDto input)
+    [HttpPut]
+    public async Task<IActionResult> UpdateUser(UpdateUserDto input)
     {
-        var command = new UpdateUserCommand(input.Id, input.Password, input.NewPassword);
+        var userId = currentUserProvider.CurrentUser.Id;
+        var command = new UpdateUserCommand(userId, input.Password, input.NewPassword, input.DisplayName);
         var result = await dispatcher.SendAsync(command);
-        return Result(result);
+        return NoContent(result);
     }
 
     [HttpDelete("{id:guid}")]
@@ -67,6 +70,6 @@ public class UserController(IDispatcher dispatcher, IAuditContext auditContext) 
     {
         var command = new DeleteUserCommand(id);
         var result = await dispatcher.SendAsync(command);
-        return Result(result);
+        return NoContent(result);
     }
 }

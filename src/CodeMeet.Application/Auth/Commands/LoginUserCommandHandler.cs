@@ -28,7 +28,7 @@ public class LoginUserCommandHandler(IPasswordHasher hasher, IRepository<User> r
             return Error.Unauthorized(description: "The uesrname or password is not correct.");
         }
         
-        var jwtToken = jwtTokenGenerator.GenerateToken(user.Id, username, user.Email);
+        var jwtToken = jwtTokenGenerator.GenerateToken(user.Id, username, user.Email, user.Roles, user.Permissions);
 
         return new AuthDto(UserDto.FromEntity(user), jwtToken).ToErrorOr();
     }
