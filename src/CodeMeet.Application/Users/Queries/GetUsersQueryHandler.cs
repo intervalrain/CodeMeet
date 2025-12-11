@@ -8,19 +8,12 @@ namespace CodeMeet.Application.Users.Queries;
 
 public record GetUsersQuery : IQuery<ErrorOr<IEnumerable<UserDto>>>;
 
-public class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, ErrorOr<IEnumerable<UserDto>>>
+public class GetUsersQueryHandler(IRepository<User> repository) : IQueryHandler<GetUsersQuery, ErrorOr<IEnumerable<UserDto>>>
 {
-    private readonly IRepository<User> _repository;
-
-    public GetUsersQueryHandler(IRepository<User> repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<ErrorOr<IEnumerable<UserDto>>> HandleAsync(GetUsersQuery query, CancellationToken token = default)
     {
-        var users = await _repository.GetListAsync(token);
+        var users = await repository.GetListAsync(token);
 
-        return users.Select(user => new UserDto(user.Id, user.Username)).ToErrorOr();
+        return users.Select(UserDto.FromEntity).ToErrorOr();
     }
 }

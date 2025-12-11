@@ -1,25 +1,23 @@
 using Asp.Versioning;
-
 using CodeMeet.Api.Models.Users;
 using CodeMeet.Application.Users.Commands;
 using CodeMeet.Application.Users.Queries;
 using CodeMeet.Ddd.Application.Cqrs;
+using CodeMeet.Ddd.Application.Cqrs.Audit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeMeet.Api.Controllers.V1;
 
 [ApiVersion("1.0")]
-public class UserController(IDispatcher dispatcher) : ApiController
+public class UserController(IDispatcher dispatcher, IAuditContext auditContext) : ApiController
 {
-    private readonly IDispatcher _dispatcher = dispatcher;
-
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetAllUsers()
     {
         var query = new GetUsersQuery();
-        var result = await _dispatcher.QueryAsync(query);
+        var result = await dispatcher.QueryAsync(query);
         return Result(result);
     }
 
@@ -28,21 +26,39 @@ public class UserController(IDispatcher dispatcher) : ApiController
     public async Task<IActionResult> GetUser(Guid id)
     {
         var query = new GetUserQuery(id);
-        var result = await _dispatcher.QueryAsync(query);
+        var result = await dispatcher.QueryAsync(query);
         return Result(result);
     }
 
     [HttpGet("me")]
-    public Task<IActionResult> Me()
+    public async Task<IActionResult> GetMe()
     {
-        return Task.FromResult<IActionResult>(Ok());
+        var userId = Guid.Parse(auditContext.UserId!);
+        var query = new GetMeQuery(userId);
+        var result = await dispatcher.QueryAsync(query);
+        return Result(result);
+    }
+
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register(CreateUserDto input)
+    {
+        var command = new CreateUserCommand(input.Username, input.Password, input.Email, input.DisplayName);
+        var result = await dispatcher.SendAsync(command);
+        return result.Match(
+            v => CreatedAtAction(
+                actionName: nameof(UserController.GetUser),
+                controllerName: "User",
+                routeValues: new { id = v.User.Id },
+                value: v),
+            Problem);
     }
 
     [HttpPost]
     public async Task<IActionResult> UpdateUserPassword(UpdateUserDto input)
     {
         var command = new UpdateUserCommand(input.Id, input.Password, input.NewPassword);
-        var result = await _dispatcher.SendAsync(command);
+        var result = await dispatcher.SendAsync(command);
         return Result(result);
     }
 }

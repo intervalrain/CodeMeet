@@ -1,9 +1,10 @@
 using CodeMeet.Application.Common.Security;
+using CodeMeet.Application.Gamification;
 using CodeMeet.Ddd.Application.Cqrs.Authorization;
 using CodeMeet.Ddd.Infrastructure;
 using CodeMeet.Infrastructure.Common.Persistences;
 using CodeMeet.Infrastructure.Common.Security;
-
+using CodeMeet.Infrastructure.Gamification;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,7 +29,10 @@ public static class CodeMeetInfrastructureModule
         services.AddSingleton(typeof(IRepository<>), typeof(InMemoryRepository<>));
         services.AddSingleton(typeof(IRepository<,>), typeof(InMemoryRepository<,>));
         services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
-        
+
+        // gamification
+        services.AddScoped<IGamificationService, GamificationService>();
+
         return services;
     }
 }
