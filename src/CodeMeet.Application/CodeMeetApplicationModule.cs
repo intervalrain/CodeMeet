@@ -1,7 +1,5 @@
 using System.Reflection;
-
 using CodeMeet.Ddd;
-using CodeMeet.Ddd.Application.Cqrs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

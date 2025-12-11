@@ -28,7 +28,7 @@ public class UserController(IDispatcher dispatcher) : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> GetUser(Guid id)
     {
-        var query = new GetUsersQuery();
+        var query = new GetUserQuery(id);
 
         var result = await _dispatcher.QueryAsync(query);
         return result.Match(Ok, Problem);
