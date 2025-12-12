@@ -1,5 +1,6 @@
 using CodeMeet.Application.Common.Security;
 using CodeMeet.Application.Gamification;
+using CodeMeet.Application.Matches;
 using CodeMeet.Ddd.Application.Cqrs.Authorization;
 using CodeMeet.Ddd.Infrastructure;
 using CodeMeet.Infrastructure.Common.Persistence;
@@ -8,6 +9,7 @@ using CodeMeet.Infrastructure.Common.Persistence.JsonFile;
 using CodeMeet.Infrastructure.Common.Persistence.Seeders;
 using CodeMeet.Infrastructure.Common.Security;
 using CodeMeet.Infrastructure.Gamification;
+using CodeMeet.Infrastructure.Matches;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,6 +39,11 @@ public static class CodeMeetInfrastructureModule
 
         // gamification
         services.AddScoped<IGamificationService, GamificationService>();
+
+        // matching
+        services.AddSingleton<IMatchQueueService, InMemoryMatchQueueService>();
+        services.AddScoped<IMatchNotificationService, NoOpMatchNotificationService>();
+        services.AddHostedService<MatchingBackgroundService>();
 
         return services;
     }

@@ -1,18 +1,74 @@
 using CodeMeet.Application.Gamification;
+using CodeMeet.Ddd.Infrastructure;
+using CodeMeet.Domain.Gamification.Entities;
 
 namespace CodeMeet.Infrastructure.Gamification;
 
 /// <summary>
-/// Default implementation of <see cref="IGamificationService"/>.
-/// Returns a fixed value until the Gamification domain is implemented.
+/// Implementation of <see cref="IGamificationService"/> that manages user opportunities.
+/// Automatically creates UserOpportunity for new users with initial balance of 1.
 /// </summary>
-public class GamificationService : IGamificationService
+public class GamificationService(IRepository<UserOpportunity> repository) : IGamificationService
 {
-    private const int DefaultOpportunities = 1;
-
-    public Task<int> GetOpportunitiesAsync(Guid userId, CancellationToken token = default)
+    public async Task<int> GetOpportunitiesAsync(Guid userId, CancellationToken ct = default)
     {
-        // TODO: Implement actual opportunity lookup from Gamification domain
-        return Task.FromResult(DefaultOpportunities);
+        var opportunity = await GetOrCreateOpportunityAsync(userId, ct);
+        return opportunity.Balance;
+    }
+
+    public async Task<bool> HasOpportunityAsync(Guid userId, CancellationToken ct = default)
+    {
+        var opportunity = await GetOrCreateOpportunityAsync(userId, ct);
+        return opportunity.HasOpportunity();
+    }
+
+    public async Task<bool> TryConsumeAsync(Guid userId, CancellationToken ct = default)
+    {
+        var opportunity = await GetOrCreateOpportunityAsync(userId, ct);
+
+        if (!opportunity.TryConsume())
+        {
+            return false;
+        }
+
+        await repository.UpdateAsync(opportunity, ct);
+        return true;
+    }
+
+    public async Task AwardAsync(Guid userId, int amount = 1, CancellationToken ct = default)
+    {
+        var opportunity = await GetOrCreateOpportunityAsync(userId, ct);
+        opportunity.Award(amount);
+
+        await repository.UpdateAsync(opportunity, ct);
+    }
+
+    public async Task<bool> TryAwardDailyAsync(Guid userId, CancellationToken ct = default)
+    {
+        var opportunity = await GetOrCreateOpportunityAsync(userId, ct);
+
+        if (!opportunity.TryAwardDaily())
+        {
+            return false;
+        }
+
+        await repository.UpdateAsync(opportunity, ct);
+        return true;
+    }
+
+    private async Task<UserOpportunity> GetOrCreateOpportunityAsync(Guid userId, CancellationToken ct)
+    {
+        var opportunity = await repository.FindAsync(o => o.UserId == userId, ct);
+
+        if (opportunity is not null)
+        {
+            return opportunity;
+        }
+
+        // Create new UserOpportunity with initial balance of 1
+        opportunity = UserOpportunity.Create(userId);
+        await repository.InsertAsync(opportunity, ct);
+
+        return opportunity;
     }
 }

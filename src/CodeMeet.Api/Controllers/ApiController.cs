@@ -25,6 +25,9 @@ public class ApiController : ControllerBase
     protected IActionResult NoContent<T>(ErrorOr<T> result) =>
         result.Match(_ => NoContent(), Problem);
 
+    protected IActionResult Accepted<T>(ErrorOr<T> result) =>
+        result.Match(result => Accepted(result), Problem);
+
     protected ActionResult Problem(List<Error> errors)
     {
         if (errors.Count is 0)

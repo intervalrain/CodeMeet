@@ -14,6 +14,7 @@ using System.Reflection;
 using CodeMeet.Api.Middlewares;
 using CodeMeet.Ddd;
 using CodeMeet.Ddd.Application.Cqrs.Validation;
+using System.Text.Json.Serialization;
 
 namespace CodeMeet.Api;
 
@@ -21,7 +22,8 @@ public static class CodeMeetApiModule
 {
     public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddControllers(opts => opts.Conventions.Add(new RouteTokenTransformerConvention(LowercaseRouteTransformer.Default)));
+        services.AddControllers(opts => opts.Conventions.Add(new RouteTokenTransformerConvention(LowercaseRouteTransformer.Default)))
+            .AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
         services.AddApiVersioning(options =>
         {
             options.DefaultApiVersion = new ApiVersion(1, 0);

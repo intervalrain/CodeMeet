@@ -1,6 +1,8 @@
+using CodeMeet.Domain.Matches.Enums;
+
 namespace CodeMeet.Api.Contracts.Users;
 
 public record UpdateUserPreferencesRequest(
     List<string>? Languages,
-    string? Difficulty,
+    Difficulty? Difficulty,
     bool? EnableVideo);

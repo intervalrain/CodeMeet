@@ -5,7 +5,7 @@ using CodeMeet.Application.Users.Queries;
 using CodeMeet.Ddd.Application.Cqrs;
 using CodeMeet.Ddd.Application.Cqrs.Audit;
 using CodeMeet.Ddd.Application.Cqrs.Authorization;
-
+using CodeMeet.Domain.Matches.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -80,7 +80,7 @@ public class UserController(IDispatcher dispatcher, IAuditContext auditContext, 
         var command = new UpdateUserPreferencesCommand(
             userId,
             request.Languages,
-            request.Difficulty,
+            request.Difficulty ?? Difficulty.Medium,
             request.EnableVideo);
         
         var result = await dispatcher.SendAsync(command);

@@ -1,9 +1,11 @@
+using CodeMeet.Domain.Matches.Enums;
+
 namespace CodeMeet.Domain.Users.ValueObjects;
 
 public record UserPreferences(
     IReadOnlyList<string> Languages,
-    string Difficulty,
+    Difficulty Difficulty,
     bool EnableVideo)
 {
-    public static UserPreferences Default => new([], "Medium", true);
+    public static UserPreferences Default => new([], Difficulty.Medium, true);
 }
