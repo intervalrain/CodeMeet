@@ -59,6 +59,8 @@ public static class CodeMeetApiModule
             });
         services.AddAuthorization();
 
+        services.AddHealthChecks();
+
         services.AddProblemDetails(options =>
         {
             options.CustomizeProblemDetails = context =>
@@ -99,6 +101,7 @@ public static class CodeMeetApiModule
         app.UseAuthorization();
         app.UseMiddleware<AuditContextMiddleware>();
         app.MapControllers();
+        app.MapHealthChecks("/health");
 
         return app;
     }

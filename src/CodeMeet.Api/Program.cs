@@ -26,10 +26,7 @@ try
         app.UseSerilogRequestLogging();
         app.UseApi();
 
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwaggerUI();
-        }
+        app.UseSwaggerUI();
 
         app.Run();
     }
