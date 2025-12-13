@@ -18,4 +18,20 @@ public class AuthController(IDispatcher dispatcher) : ApiController
         var result = await dispatcher.SendAsync(command);
         return Result(result);
     }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout(RefreshRequest input)
+    {
+        var command = new RevokeTokenCommand(input.RefreshToken);
+        var result = await dispatcher.SendAsync(command);
+        return NoContent(result);
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh(RefreshRequest input)
+    {
+        var command = new RefreshTokenCommand(input.RefreshToken);
+        var result = await dispatcher.SendAsync(command);
+        return Result(result);
+    }
 }

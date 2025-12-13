@@ -4,4 +4,5 @@ namespace CodeMeet.Application.Auth.Dtos;
 
 public record AuthDto(
     UserDto User,
-    string Token);
+    string Token,
+    string RefreshToken);

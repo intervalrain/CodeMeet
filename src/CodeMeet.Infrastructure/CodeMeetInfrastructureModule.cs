@@ -12,6 +12,7 @@ using CodeMeet.Infrastructure.Gamification;
 using CodeMeet.Infrastructure.Matches;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace CodeMeet.Infrastructure;
 
@@ -24,11 +25,15 @@ public static class CodeMeetInfrastructureModule
         // security
         services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<IRefreshTokenGenerator, RefreshTokenGenerator>();
         services.AddSingleton<IPolicyEnforcer, PolicyEnforcer>();
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
         services.AddScoped<IAuthorizationService, AuthorizationService>();
 
-        services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.Section));
+        services.AddOptions<JwtSettings>()
+            .Bind(configuration.GetSection(JwtSettings.Section))
+            .Validate(s => !string.IsNullOrWhiteSpace(s.Secret))
+            .ValidateOnStart();
 
         // persistences
         services.AddPersistence(configuration);

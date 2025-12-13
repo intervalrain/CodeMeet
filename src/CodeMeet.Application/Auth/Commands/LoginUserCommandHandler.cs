@@ -3,20 +3,27 @@ using CodeMeet.Application.Common.Security;
 using CodeMeet.Application.Users.Dtos;
 using CodeMeet.Ddd.Application.Cqrs.Models;
 using CodeMeet.Ddd.Infrastructure;
+using CodeMeet.Domain.Auth.Entities;
 using CodeMeet.Domain.Users.Entities;
-
 using ErrorOr;
+using Microsoft.Extensions.Options;
 
 namespace CodeMeet.Application.Auth.Commands;
 
 public record LoginUserCommand(string Username, string Password) : ICommand<ErrorOr<AuthDto>>;
 
-public class LoginUserCommandHandler(IPasswordHasher hasher, IRepository<User> repository, IJwtTokenGenerator jwtTokenGenerator) : ICommandHandler<LoginUserCommand, ErrorOr<AuthDto>>
+public class LoginUserCommandHandler(
+    IPasswordHasher hasher,
+    IRepository<User> userRepository,
+    IRepository<RefreshToken> refreshTokenRepository,
+    IJwtTokenGenerator jwtTokenGenerator,
+    IRefreshTokenGenerator refreshTokenGenerator,
+    IOptions<JwtSettings> jwtOptions) : ICommandHandler<LoginUserCommand, ErrorOr<AuthDto>>
 {
     public async Task<ErrorOr<AuthDto>> HandleAsync(LoginUserCommand command, CancellationToken token = default)
     {
         var username = command.Username;
-        var user = await repository.FindAsync(user => user.Username == username, token);
+        var user = await userRepository.FindAsync(user => user.Username == username, token);
         if (user is null)
         {
             return Error.NotFound(description: "The user is not found.");
@@ -28,8 +35,19 @@ public class LoginUserCommandHandler(IPasswordHasher hasher, IRepository<User> r
             return Error.Unauthorized(description: "The uesrname or password is not correct.");
         }
         
+        // Generate access token
         var jwtToken = jwtTokenGenerator.GenerateToken(user.Id, username, user.Email, user.Roles, user.Permissions);
 
-        return new AuthDto(UserDto.FromEntity(user), jwtToken).ToErrorOr();
+        // Generate refresh token
+        var refreshTokenString = refreshTokenGenerator.GenerateToken();
+        var refreshTokenHash = refreshTokenGenerator.HashToken(refreshTokenString);
+        var refreshToken = RefreshToken.Create(
+            user.Id,
+            refreshTokenHash,
+            jwtOptions.Value.RefreshTokenExpirationInDays);
+
+        await refreshTokenRepository.InsertAsync(refreshToken, token);
+
+        return new AuthDto(UserDto.FromEntity(user), jwtToken, refreshTokenString);
     }
 }
